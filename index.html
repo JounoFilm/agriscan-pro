@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AgriScan Pro - AI搭載ドローン圃場健康診断システム。福岡県・九州の水稲栽培に特化した病害虫検出・雑草管理・散布実績レポート。">
+  <title>AgriScan Pro | 圃場AI健康診断ダッシュボード</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌾</text></svg>">
+</head>
+<body data-page="dashboard">
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">🌾</div>
+        <div class="logo-text">
+          <span class="logo-name">AgriScan Pro</span>
+          <span class="logo-sub">Field Health AI</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">メイン</div>
+        <a href="index.html" class="nav-item active" id="nav-dashboard">
+          <span class="nav-icon">📊</span>
+          <span>ダッシュボード</span>
+        </a>
+        <a href="fields.html" class="nav-item" id="nav-fields">
+          <span class="nav-icon">🗺️</span>
+          <span>圃場管理</span>
+        </a>
+        <a href="upload.html" class="nav-item" id="nav-upload">
+          <span class="nav-icon">📤</span>
+          <span>画像アップロード</span>
+        </a>
+
+        <div class="sidebar-section-label">解析</div>
+        <a href="report.html" class="nav-item" id="nav-report">
+          <span class="nav-icon">🔬</span>
+          <span>解析レポート</span>
+          <span class="nav-badge">3</span>
+        </a>
+        <a href="report.html" class="nav-item" id="nav-weed">
+          <span class="nav-icon">🌿</span>
+          <span>雑草マップ</span>
+        </a>
+        <a href="report.html" class="nav-item" id="nav-spray">
+          <span class="nav-icon">✈️</span>
+          <span>散布実績</span>
+        </a>
+
+        <div class="sidebar-section-label">設定</div>
+        <a href="#" class="nav-item" id="nav-settings">
+          <span class="nav-icon">⚙️</span>
+          <span>システム設定</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar">田</div>
+          <div class="user-info">
+            <span class="user-name">田中 太郎</span>
+            <span class="user-role">筑前町 農家</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+          <div>
+            <div class="page-title">ダッシュボード</div>
+            <div class="page-breadcrumb">圃場健康状態の概要</div>
+          </div>
+        </div>
+        <div class="header-right">
+          <span class="header-date"></span>
+          <button class="header-btn" id="notifications-btn" title="通知">
+            🔔
+            <span class="badge-dot"></span>
+          </button>
+          <a href="upload.html" class="btn btn-primary btn-sm">
+            📤 新規アップロード
+          </a>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-container">
+
+        <!-- Stats Row -->
+        <section class="section-gap">
+          <div class="stats-grid"></div>
+        </section>
+
+        <!-- Score + Alerts Row -->
+        <section class="grid-sidebar section-gap">
+          <!-- Health Score -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📊 総合圃場健康スコア</div>
+              <span class="card-subtitle">最終診断: 2026/08/05</span>
+            </div>
+            <div class="score-ring-container">
+              <div class="score-ring">
+                <svg viewBox="0 0 200 200">
+                  <defs>
+                    <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style="stop-color:#1b5e20"/>
+                      <stop offset="50%" style="stop-color:#43a047"/>
+                      <stop offset="100%" style="stop-color:#f6c343"/>
+                    </linearGradient>
+                  </defs>
+                  <circle class="ring-bg" cx="100" cy="100" r="90"/>
+                  <circle class="ring-fill" cx="100" cy="100" r="90"/>
+                </svg>
+                <div class="score-value">
+                  <div class="score-number">0</div>
+                  <div class="score-label">/ 100</div>
+                </div>
+              </div>
+              <div class="score-assessment caution">⚠️ 注意 — 一部対処が必要です</div>
+            </div>
+            <div style="margin-top:var(--space-lg);display:flex;flex-direction:column;gap:var(--space-sm);">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+                <span>🔬 病害虫</span>
+                <div class="flex items-center gap-sm">
+                  <div class="severity-bar" style="width:100px"><div class="fill amber" style="width:65%"></div></div>
+                  <span class="fw-600">65</span>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+                <span>🌿 雑草管理</span>
+                <div class="flex items-center gap-sm">
+                  <div class="severity-bar" style="width:100px"><div class="fill green" style="width:80%"></div></div>
+                  <span class="fw-600">80</span>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+                <span>🏗️ 畦畔・水路</span>
+                <div class="flex items-center gap-sm">
+                  <div class="severity-bar" style="width:100px"><div class="fill green" style="width:85%"></div></div>
+                  <span class="fw-600">85</span>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+                <span>✈️ 散布実績</span>
+                <div class="flex items-center gap-sm">
+                  <div class="severity-bar" style="width:100px"><div class="fill green" style="width:90%"></div></div>
+                  <span class="fw-600">90</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Alerts & Actions -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🚨 アラート・推奨アクション</div>
+              <a href="report.html" class="btn btn-outline btn-sm">すべて見る →</a>
+            </div>
+            <div class="alert-list"></div>
+          </div>
+        </section>
+
+        <!-- 5 Module Overview -->
+        <section class="section-gap">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-lg);">
+            <h2 style="font-size:18px;font-weight:700;">📋 5つの解析モジュール</h2>
+          </div>
+          <div class="module-grid"></div>
+        </section>
+
+        <!-- Next Actions -->
+        <section class="section-gap">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📝 今すぐやるべきこと</div>
+            </div>
+            <div class="next-actions alert-list"></div>
+          </div>
+        </section>
+
+        <!-- Field Overview Table -->
+        <section class="section-gap">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🌾 圃場一覧</div>
+              <a href="fields.html" class="btn btn-outline btn-sm">圃場管理画面 →</a>
+            </div>
+            <div class="dashboard-fields"></div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Python
+backend/venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Database (ローカルデータ)
+backend/*.db
+
+# Uploads (ユーザーがアップした画像)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# API keys (絶対にアップしない)
+.env

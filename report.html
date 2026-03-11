@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AgriScan Pro - AI解析レポート。病害虫診断、雑草密度マップ、畦畔チェック、散布実績を統合表示。">
+  <title>AgriScan Pro | 解析レポート</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌾</text></svg>">
+</head>
+<body data-page="report">
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">🌾</div>
+        <div class="logo-text">
+          <span class="logo-name">AgriScan Pro</span>
+          <span class="logo-sub">Field Health AI</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">メイン</div>
+        <a href="index.html" class="nav-item" id="nav-dashboard">
+          <span class="nav-icon">📊</span>
+          <span>ダッシュボード</span>
+        </a>
+        <a href="fields.html" class="nav-item" id="nav-fields">
+          <span class="nav-icon">🗺️</span>
+          <span>圃場管理</span>
+        </a>
+        <a href="upload.html" class="nav-item" id="nav-upload">
+          <span class="nav-icon">📤</span>
+          <span>画像アップロード</span>
+        </a>
+        <div class="sidebar-section-label">解析</div>
+        <a href="report.html" class="nav-item active" id="nav-report">
+          <span class="nav-icon">🔬</span>
+          <span>解析レポート</span>
+          <span class="nav-badge">3</span>
+        </a>
+        <a href="report.html" class="nav-item" id="nav-weed">
+          <span class="nav-icon">🌿</span>
+          <span>雑草マップ</span>
+        </a>
+        <a href="report.html" class="nav-item" id="nav-spray">
+          <span class="nav-icon">✈️</span>
+          <span>散布実績</span>
+        </a>
+        <div class="sidebar-section-label">設定</div>
+        <a href="#" class="nav-item" id="nav-settings">
+          <span class="nav-icon">⚙️</span>
+          <span>システム設定</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar">田</div>
+          <div class="user-info">
+            <span class="user-name">田中 太郎</span>
+            <span class="user-role">筑前町 農家</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+          <div>
+            <div class="page-title">解析レポート</div>
+            <div class="page-breadcrumb">圃場健康診断レポート — 2026年8月5日</div>
+          </div>
+        </div>
+        <div class="header-right">
+          <span class="header-date"></span>
+          <button class="btn btn-outline btn-sm" id="export-pdf-btn">📄 PDF出力</button>
+          <button class="btn btn-outline btn-sm" id="export-simple-btn">📋 かんたん版</button>
+        </div>
+      </header>
+
+      <div class="page-container">
+
+        <!-- Report Header Banner -->
+        <section class="section-gap">
+          <div class="report-header">
+            <div class="report-header-left">
+              <h1>🌾 圃場健康診断レポート</h1>
+              <p>筑前町 管理圃場 6区画 ｜ 最終撮影日: 2026年8月5日 ｜ DJI AGRAS T70P + Inspire 3</p>
+            </div>
+            <div style="text-align:center;">
+              <div class="score-ring" style="width:100px;height:100px;">
+                <svg viewBox="0 0 200 200" style="width:100px;height:100px;">
+                  <defs>
+                    <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style="stop-color:#1b5e20"/>
+                      <stop offset="50%" style="stop-color:#43a047"/>
+                      <stop offset="100%" style="stop-color:#f6c343"/>
+                    </linearGradient>
+                  </defs>
+                  <circle class="ring-bg" cx="100" cy="100" r="90"/>
+                  <circle class="ring-fill" cx="100" cy="100" r="90"/>
+                </svg>
+                <div class="score-value">
+                  <div class="score-number" style="font-size:28px;">0</div>
+                  <div class="score-label" style="font-size:9px;">/100</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <button class="tab active" data-tab="tab-disease">🔬 病害虫診断</button>
+          <button class="tab" data-tab="tab-weed">🌿 雑草マップ</button>
+          <button class="tab" data-tab="tab-infra">🏗️ 畦畔・水路</button>
+          <button class="tab" data-tab="tab-spray">✈️ 散布実績</button>
+          <button class="tab" data-tab="tab-summary">📊 総合サマリ</button>
+        </div>
+
+        <!-- Tab: 病害虫診断 -->
+        <div class="tab-content active" id="tab-disease">
+          <section class="grid-sidebar section-gap">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">📋 検出サマリ</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--space-md);">
+                <div style="text-align:center;padding:var(--space-md);background:rgba(239,83,80,0.08);border-radius:var(--radius-md);">
+                  <div style="font-size:36px;font-weight:900;color:var(--danger);">5</div>
+                  <div style="font-size:12px;color:var(--text-muted);">検出された病害虫</div>
+                </div>
+                <div style="display:flex;gap:var(--space-sm);">
+                  <div style="flex:1;text-align:center;padding:var(--space-sm);background:var(--bg-tertiary);border-radius:var(--radius-sm);">
+                    <div style="font-size:20px;font-weight:700;color:var(--danger);">1</div>
+                    <div style="font-size:10px;color:var(--text-muted);">重度</div>
+                  </div>
+                  <div style="flex:1;text-align:center;padding:var(--space-sm);background:var(--bg-tertiary);border-radius:var(--radius-sm);">
+                    <div style="font-size:20px;font-weight:700;color:var(--warning);">3</div>
+                    <div style="font-size:10px;color:var(--text-muted);">中度/軽度</div>
+                  </div>
+                  <div style="flex:1;text-align:center;padding:var(--space-sm);background:var(--bg-tertiary);border-radius:var(--radius-sm);">
+                    <div style="font-size:20px;font-weight:700;color:var(--info);">1</div>
+                    <div style="font-size:10px;color:var(--text-muted);">要確認</div>
+                  </div>
+                </div>
+                <div style="font-size:12px;color:var(--text-muted);line-height:1.6;border-top:1px solid var(--border-color);padding-top:var(--space-md);">
+                  <strong>⚠️ 最重要:</strong> C区画でトビイロウンカの坪枯れ兆候を検出。ジノテフラン粒剤の緊急散布を推奨します。
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">🔬 検出された病害虫</div>
+              </div>
+              <div class="detection-list"></div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tab: 雑草マップ -->
+        <div class="tab-content" id="tab-weed">
+          <section class="grid-sidebar section-gap">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">📊 雑草被覆度サマリ</div>
+              </div>
+              <div style="text-align:center;padding:var(--space-md);margin-bottom:var(--space-md);">
+                <div style="font-size:42px;font-weight:900;color:var(--warning);">8.5<span style="font-size:16px;">%</span></div>
+                <div style="font-size:12px;color:var(--text-muted);">全体平均被覆率</div>
+              </div>
+              <div style="display:flex;gap:var(--space-sm);margin-bottom:var(--space-lg);">
+                <div style="flex:1;text-align:center;padding:var(--space-sm);border-radius:var(--radius-sm);">
+                  <div style="width:20px;height:20px;border-radius:4px;background:rgba(76,175,80,0.3);margin:0 auto 4px;"></div>
+                  <div style="font-size:10px;color:var(--text-muted);">低</div>
+                </div>
+                <div style="flex:1;text-align:center;padding:var(--space-sm);border-radius:var(--radius-sm);">
+                  <div style="width:20px;height:20px;border-radius:4px;background:rgba(255,152,0,0.5);margin:0 auto 4px;"></div>
+                  <div style="font-size:10px;color:var(--text-muted);">中</div>
+                </div>
+                <div style="flex:1;text-align:center;padding:var(--space-sm);border-radius:var(--radius-sm);">
+                  <div style="width:20px;height:20px;border-radius:4px;background:rgba(239,83,80,0.6);margin:0 auto 4px;"></div>
+                  <div style="font-size:10px;color:var(--text-muted);">高</div>
+                </div>
+                <div style="flex:1;text-align:center;padding:var(--space-sm);border-radius:var(--radius-sm);">
+                  <div style="width:20px;height:20px;border-radius:4px;background:rgba(239,83,80,0.9);margin:0 auto 4px;"></div>
+                  <div style="font-size:10px;color:var(--text-muted);">極高</div>
+                </div>
+              </div>
+              <div class="card-title" style="font-size:13px;margin-bottom:var(--space-md);">🌿 検出された雑草</div>
+              <div class="weed-found-list"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">🗺️ 雑草密度マップ — 下田圃場（A区画）</div>
+              </div>
+              <div class="weed-density-grid" style="margin-bottom:var(--space-lg);"></div>
+              <div style="font-size:12px;color:var(--text-muted);line-height:1.6;">
+                <strong>解析結果:</strong> 圃場西側でノビエ（ヒエ類）の集中的な繁殖を確認。被覆度5-15%のエリアがあり、次回除草剤散布を推奨します。南東部は除草剤の効果が良好で、被覆度5%未満を維持しています。
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tab: 畦畔・水路 -->
+        <div class="tab-content" id="tab-infra">
+          <section class="section-gap">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">🏗️ 畦畔・水路の異常検出</div>
+                <span class="badge badge-warning">3件の異常を検出</span>
+              </div>
+              <div class="infra-list alert-list"></div>
+            </div>
+          </section>
+          <section class="section-gap">
+            <div class="card" style="border-left:3px solid var(--info);">
+              <div class="card-title" style="margin-bottom:var(--space-md);">ℹ️ 畦畔・水路チェックについて</div>
+              <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+                畦畔・水路モジュールでは、ドローン映像から以下の異常を自動検出します：<br>
+                ・畦畔の崩れ（法面の形状変化、土砂の流出）<br>
+                ・水路の詰まり（水面の停滞、藻類の繁殖）<br>
+                ・獣害痕（イノシシの掘り返し等）<br>
+                ・モグラ被害（畦畔表面の隆起）<br>
+                ・電気柵の損傷<br><br>
+                <strong>推奨撮影:</strong> 30mの高度から斜め撮影することで、畦畔の側面状態をより正確に把握できます。
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tab: 散布実績 -->
+        <div class="tab-content" id="tab-spray">
+          <section class="section-gap">
+            <div class="grid-sidebar">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">📊 散布実績サマリ</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:var(--space-md);">
+                  <div style="text-align:center;padding:var(--space-md);background:rgba(76,175,80,0.08);border-radius:var(--radius-md);">
+                    <div style="font-size:36px;font-weight:900;color:var(--success);">4</div>
+                    <div style="font-size:12px;color:var(--text-muted);">今シーズンの散布回数</div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);">
+                    <div style="text-align:center;padding:var(--space-sm);background:var(--bg-tertiary);border-radius:var(--radius-sm);">
+                      <div style="font-size:18px;font-weight:700;">13.7ha</div>
+                      <div style="font-size:10px;color:var(--text-muted);">総散布面積</div>
+                    </div>
+                    <div style="text-align:center;padding:var(--space-sm);background:var(--bg-tertiary);border-radius:var(--radius-sm);">
+                      <div style="font-size:18px;font-weight:700;">110L</div>
+                      <div style="font-size:10px;color:var(--text-muted);">総散布量</div>
+                    </div>
+                  </div>
+                  <div style="font-size:12px;color:var(--text-muted);border-top:1px solid var(--border-color);padding-top:var(--space-md);">
+                    <strong>📋 スマート農業加算:</strong><br>
+                    この散布実績データは、中山間地域等直接支払制度のスマート農業加算（5,000円/10a）の申請証拠として利用可能です。
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">📅 散布履歴タイムライン</div>
+                </div>
+                <div class="spray-timeline"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tab: 総合サマリ -->
+        <div class="tab-content" id="tab-summary">
+          <section class="section-gap">
+            <div class="grid-2">
+              <!-- Overall Score -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">📊 総合健康スコア</div>
+                </div>
+                <div style="text-align:center;padding:var(--space-lg);">
+                  <div style="font-size:72px;font-weight:900;background:linear-gradient(135deg,var(--primary-300),var(--accent-gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">72</div>
+                  <div style="font-size:14px;color:var(--text-muted);">/ 100</div>
+                  <div class="score-assessment caution" style="margin-top:var(--space-md);display:inline-block;">⚠️ 注意 — 一部対処が必要</div>
+                </div>
+                <div style="margin-top:var(--space-lg);display:flex;flex-direction:column;gap:var(--space-sm);">
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+                    <span>🔬 病害虫診断</span>
+                    <div class="flex items-center gap-sm">
+                      <div class="severity-bar" style="width:120px"><div class="fill amber" style="width:65%"></div></div>
+                      <span class="fw-600" style="min-width:25px;text-align:right;">65</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+                    <span>🌿 雑草管理</span>
+                    <div class="flex items-center gap-sm">
+                      <div class="severity-bar" style="width:120px"><div class="fill green" style="width:80%"></div></div>
+                      <span class="fw-600" style="min-width:25px;text-align:right;">80</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+                    <span>🏗️ 畦畔・水路</span>
+                    <div class="flex items-center gap-sm">
+                      <div class="severity-bar" style="width:120px"><div class="fill green" style="width:85%"></div></div>
+                      <span class="fw-600" style="min-width:25px;text-align:right;">85</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+                    <span>✈️ 散布実績</span>
+                    <div class="flex items-center gap-sm">
+                      <div class="severity-bar" style="width:120px"><div class="fill green" style="width:90%"></div></div>
+                      <span class="fw-600" style="min-width:25px;text-align:right;">90</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Next Recommended Actions -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">📝 推奨アクション</div>
+                </div>
+                <div class="alert-list">
+                  <div class="alert-item urgent">
+                    <div class="alert-icon urgent">🔴</div>
+                    <div class="alert-content">
+                      <div class="alert-title">C区画にジノテフラン粒剤の緊急散布</div>
+                      <div class="alert-desc">トビイロウンカの坪枯れ兆候を検出。被害拡大前の対応が急務。</div>
+                      <div class="alert-meta"><span class="alert-tag urgent">緊急</span><span>📅 8月6日まで</span></div>
+                    </div>
+                  </div>
+                  <div class="alert-item warning">
+                    <div class="alert-icon warning">🟠</div>
+                    <div class="alert-content">
+                      <div class="alert-title">E区画のカメムシ防除（穂揃期+7日）</div>
+                      <div class="alert-desc">イネカメムシ確認済み。斑点米予防のための適期防除を推奨。</div>
+                      <div class="alert-meta"><span class="alert-tag warning">高</span><span>📅 8月8日まで</span></div>
+                    </div>
+                  </div>
+                  <div class="alert-item info">
+                    <div class="alert-icon info">🟡</div>
+                    <div class="alert-content">
+                      <div class="alert-title">A区画の葉いもち経過観察撮影</div>
+                      <div class="alert-desc">軽度だが拡大傾向。低高度(10m)での詳細撮影で進展を確認。</div>
+                      <div class="alert-meta"><span class="badge badge-info">中</span><span>📅 8月10日まで</span></div>
+                    </div>
+                  </div>
+                  <div class="alert-item info">
+                    <div class="alert-icon info">🟢</div>
+                    <div class="alert-content">
+                      <div class="alert-title">次回ドローン撮影の推奨日</div>
+                      <div class="alert-desc">8月12日頃に全圃場の経過観察撮影を推奨します。</div>
+                      <div class="alert-meta"><span class="badge badge-success">予定</span><span>📅 8月12日</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Simple Report Preview -->
+          <section class="section-gap">
+            <div class="card" style="border:2px solid var(--primary-600);background:rgba(30,45,35,0.95);">
+              <div class="card-header">
+                <div class="card-title">📋 かんたん版プレビュー（A4 1枚）</div>
+                <span class="card-subtitle">70代以上の農家が一目で理解できるレポート</span>
+              </div>
+              <div style="background:white;color:#222;border-radius:var(--radius-md);padding:var(--space-xl);max-width:600px;margin:0 auto;">
+                <div style="text-align:center;margin-bottom:20px;border-bottom:3px solid #2e7d32;padding-bottom:16px;">
+                  <div style="font-size:22px;font-weight:900;color:#1b5e20;">🌾 圃場 けんこう しんだん</div>
+                  <div style="font-size:13px;color:#666;margin-top:4px;">筑前町 田中太郎さん ｜ 2026年8月5日</div>
+                </div>
+                <div style="text-align:center;margin-bottom:20px;">
+                  <div style="font-size:64px;">⚠️</div>
+                  <div style="font-size:24px;font-weight:900;color:#e65100;">ちゅうい</div>
+                  <div style="font-size:14px;color:#666;">いくつか対応が必要です</div>
+                </div>
+                <div style="margin-bottom:20px;">
+                  <div style="font-size:18px;font-weight:900;color:#222;margin-bottom:12px;">📌 いま やること</div>
+                  <div style="background:#fff3e0;border-left:4px solid #e65100;padding:12px;border-radius:4px;margin-bottom:8px;font-size:16px;">
+                    <strong>🔴 虫が原因で一部が枯れています</strong><br>
+                    <span style="font-size:14px;color:#555;">中山棚田（C区画）→ すぐに薬を撒く必要があります</span>
+                  </div>
+                  <div style="background:#e3f2fd;border-left:4px solid #1565c0;padding:12px;border-radius:4px;margin-bottom:8px;font-size:16px;">
+                    <strong>🟡 大平圃場に虫がいます</strong><br>
+                    <span style="font-size:14px;color:#555;">8月8日までに薬を撒くと効果的です</span>
+                  </div>
+                  <div style="background:#e8f5e9;border-left:4px solid #2e7d32;padding:12px;border-radius:4px;font-size:16px;">
+                    <strong>🟢 その他の田んぼは おおむね良好です</strong><br>
+                    <span style="font-size:14px;color:#555;">引き続き経過を見守ります</span>
+                  </div>
+                </div>
+                <div style="text-align:center;font-size:14px;color:#666;border-top:1px solid #ddd;padding-top:12px;">
+                  次のドローン撮影予定: <strong>8月12日</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
